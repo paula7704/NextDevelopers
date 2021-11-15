@@ -29,6 +29,7 @@ export class Pedido extends Entity {
     required: true,
   })
   total: number;
+
   @belongsTo(() => Persona)
   personaId: string;
 

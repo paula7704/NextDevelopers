@@ -1,6 +1,6 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
-import {Persona} from './persona.model';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Material} from './material.model';
+import {Persona} from './persona.model';
 
 @model()
 export class Pedido extends Entity {
@@ -29,6 +29,13 @@ export class Pedido extends Entity {
     required: true,
   })
   total: number;
+
+
+  @property({
+    type: 'array',
+    itemType: 'any'
+  })
+  Materiales?: Material[];
 
   @belongsTo(() => Persona)
   personaId: string;

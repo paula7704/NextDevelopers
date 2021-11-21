@@ -40,7 +40,7 @@ app.get('/api/ws/wsconfirmation',(req,res,next)=>{
         res.json(client.messages
          .create({
            body: `Confirmación de su orden # ${req.body.orden} , Estado del pedido ${req.body.estado}`,
-           from: 'whatsapp:+14155238886',
+           from: 'whatsapp:+',
            to: 'whatsapp:+573014984295'
          })
          .then(message => console.log(`Mensaje enviado ${message.sid}`))

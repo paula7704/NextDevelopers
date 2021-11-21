@@ -17,7 +17,7 @@ function sendText(orden, estado, destino,from){
        client.messages
          .create({
            body: `Confirmación de su orden # ${orden} , Estado del pedido ${estado}`,
-           from: 'whatsapp:+14155238886',
+           from: 'whatsapp:+',
            to: `whatsapp:+57${destino}`
          })
          .then(message => console.log(`Mensaje enviado ${message.sid}`));

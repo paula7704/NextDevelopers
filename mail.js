@@ -22,51 +22,105 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 function sendEmailHTML(nombre,orden,estado){
     return `<!DOCTYPE html>
     <html>
-      <head>
-        <meta charset="utf-8">
-        <title>Orden de compra</title>
-      </head>
-      <body>
-      
-        <table border="1" style=”width: 100%”>
-			<caption>Detalle de Orden</caption>
-			<colgroup>
-				<col style="width: 20%"/>
-				<col style="width: 40%"/>
-				<col style="width: 40%"/>
-			</colgroup>
-			<thead>
-				<tr>
-					<th rowspan="2">Orden N°</th>
-					<th colspan="2">Detalle del pedido actual</th>
-				</tr>
-				<tr>
-					<th>Nombre del empleado</th>
-					<th>Estado Pedido</th>
-				</tr>
-			</thead>
-			<tfoot>
-				<tr>
-					<td colspan="3">Observaciones.</td>
-				</tr>
-			</tfoot>
-			<tbody>
-				<tr>
-					<th>${orden}</th>
-					<td>${nombre}</td>
-					<td>${estado}</td>
-				</tr>
-				<tr>
-        <th>${orden}</th>
-        <td>${nombre}</td>
-        <td>${estado}</td>
-				</tr>
-			</tbody>
-		</table>
-
-        <img src="./img/Orden01.jpg" alt="">
-      </body>
-    </html>`
+    <head>
+    <title>Page Title</title>
+            <style>
+                .container {
+                    margin: 50px 50px 50px 50px;
+                      display: grid;
+                      grid-template-columns: 1fr 1fr;
+                      grid-auto-rows: minmax(50px, auto);
+    grid-gap:1em;               
+    
+                }
+                .container > img {
+                    width: 250px;
+                    grid-row: 1;
+                    
+                }
+                .container > h1 {
+                    grid-row: 1;                
+                }
+                 .fecha {
+                    grid-row: 2;                
+                }
+                .foot {
+                    grid-row: 4;
+                    grid-column: 1/3;                
+                    color: white;
+    background-color: rgb(62, 62, 62);
+                }
+                .container > table {
+      grid-row: 3;  
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+                .cuadro {
+    grid-row: 3;
+    color: white;
+    background-color: rgb(62, 62, 62);
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+      color: white;
+    background-color: rgb(62, 62, 62);
+    }
+    </style>
+    </head>
+    <body>
+    <div class="container">
+    <img src="https://i.ibb.co/rbk7JQG/Constructora.png" alt="Logo Constructora">
+    <h3 class="fecha">Fecha: 2021/11/20</h3>
+    <h1>Información de pedido</h1>
+    <div class="cuadro">
+    <h3>PEDIDO N°1</h3>
+    <h3>OBRA: Los Cocos</h3>
+    <h3>PEDIDO POR: Director de obra</h3>
+    <h3>ESTADO DEL PEDIDO: Pedido</h3>
+    </div>
+    <table>
+      <tr>
+        <th>Material</th>
+        <th>Unidad</th>
+        <th>Cantidad</th>
+      </tr>
+      <tr>
+        <td>Yee Doble 2" Sanit</td>
+        <td>Unidad</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td>Acero figurado 3/8"</td>
+        <td>Kg</td>
+        <td>1.000</td>
+      </tr>
+      <tr>
+        <td>Bota de platina No.39</td>
+        <td>Par</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>Clavo común 3"</td>
+        <td>Libra</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td>Cemento x50KG</td>
+        <td>Bulto</td>
+        <td>30</td>
+      </tr>
+    </table>
+    <h4 class="foot">Líneas de atención en Bogotá (xx-x) xxx xxxx o en el resto del país xx xxxx xx xx xx
+    Si deseas contactarnos, puedes escribirnos a servicliente@constructora.com.co</h4>
+    </body>
+    </html>
+    
+    
+    `
 }
 
 function getMessage(emailParams){

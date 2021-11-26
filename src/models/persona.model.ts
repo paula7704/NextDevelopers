@@ -23,6 +23,24 @@ export class Persona extends Entity {
   })
   identificacion: string;
 
+  @property({
+    type: 'string',
+    required: true,
+  })
+  celular: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  mail: string;
+
+  @property({
+    type: 'string',
+    required: false,
+  })
+  clave: string;
+
   @hasMany(() => Material, {through: {model: () => Pedido}})
   materials: Material[];
 

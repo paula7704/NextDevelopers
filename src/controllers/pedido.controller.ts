@@ -4,27 +4,28 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
+import {llaves} from '../config/llaves';
 import {Pedido} from '../models';
-import {PedidoRepository} from '../repositories';
+import {MaterialRepository, PedidoRepository, PersonaRepository} from '../repositories';
 
+const fetch = require('node-fetch');
 export class PedidoController {
   constructor(
     @repository(PedidoRepository)
-    public pedidoRepository : PedidoRepository,
-  ) {}
+    public pedidoRepository: PedidoRepository,
+    @repository(MaterialRepository)
+    public materialRepository: MaterialRepository,
+    @repository(PersonaRepository)
+    public personaRepository: PersonaRepository
+
+  ) { }
 
   @post('/pedidos')
   @response(200, {
@@ -44,7 +45,17 @@ export class PedidoController {
     })
     pedido: Omit<Pedido, 'id'>,
   ): Promise<Pedido> {
-    return this.pedidoRepository.create(pedido);
+    const d = new Date();
+    let asunto = 'Confirmación de Pedido'
+    let p = await this.pedidoRepository.create(pedido);
+    let materiales = this.materialRepository.findById(p.materialId)
+    let persona = this.personaRepository.findById(p.personaId)
+
+    fetch(`${llaves.urlNotification}/mail?nombre=${(await persona).nombre}&orden=${p.codigo}&estado=${p.estado}&destinatario=${(await persona).mail}&asunto=${asunto}`)
+      .then((data: any) => {
+        console.log(data)
+      })
+    return p
   }
 
   @get('/pedidos/count')
@@ -147,4 +158,7 @@ export class PedidoController {
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.pedidoRepository.deleteById(id);
   }
+
 }
+
+

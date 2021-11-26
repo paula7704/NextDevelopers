@@ -1,3 +1,4 @@
+import {service} from '@loopback/core';
 import {
   Count,
   CountSchema,
@@ -16,14 +17,19 @@ import {
   del,
   requestBody,
   response,
+  HttpErrors,
 } from '@loopback/rest';
-import {Persona} from '../models';
+import {llaves} from '../config/llaves';
+import {Credenciales, Persona} from '../models';
 import {PersonaRepository} from '../repositories';
-
+import {AuthenticatorService} from '../services';
+const fetch= require('node-fetch');
 export class PersonaController {
   constructor(
     @repository(PersonaRepository)
     public personaRepository : PersonaRepository,
+    @service(AuthenticatorService)
+    public authenticator:AuthenticatorService
   ) {}
 
   @post('/personas')
@@ -44,7 +50,44 @@ export class PersonaController {
     })
     persona: Omit<Persona, 'id'>,
   ): Promise<Persona> {
-    return this.personaRepository.create(persona);
+    let clave=this.authenticator.GenerarClave()
+    let claveCifrada= this.authenticator.cifrarClave(clave)
+    persona.clave= claveCifrada;
+    let asunto='Confirmación de Usuario creado'
+    let p= await this.personaRepository.create(persona);
+    fetch(`${llaves.urlNotification}/mail?mensaje=Hola ${p.nombre} su usuario es: ${p.mail} y la contraseña: ${clave}&destinatario=${p.mail}&asunto=${asunto}`)
+    .then((data:any)=>{
+      console.log(data)
+    })
+    return p
+  }
+
+  @post('/identificarPersona',{
+    responses:{
+      '200':{
+        description:'Identifiación de usuarios'
+      }
+    }
+  })
+  async identificarPersona(
+    @requestBody() credenciales:Credenciales
+  ){
+    let p= await this.authenticator.identificarPersona(credenciales.usuario, credenciales.clave)
+    if(p){
+        let token= this.authenticator.generarToken(p);
+        return{
+          datos:{
+            nombre:p.nombre,
+            mail: p.mail,
+            identificacion:p.identificacion,
+            id:p.id
+          },
+          tk: token
+        }
+    }else{
+      throw new HttpErrors[401]('Datos inválidos');
+    }
+
   }
 
   @get('/personas/count')

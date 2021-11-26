@@ -15,7 +15,6 @@ export class Pedido extends Entity {
     type: 'date',
     required: true,
   })
-
   fechaCompra: string;
 
   @property({
@@ -30,12 +29,24 @@ export class Pedido extends Entity {
   })
   total: number;
 
+  @property({
+    type: 'number',
+    required: true,
+  })
+  codigo: number;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  estado: string;
 
   @property({
     type: 'array',
     itemType: 'any'
   })
   Materiales?: Material[];
+
 
   @belongsTo(() => Persona)
   personaId: string;

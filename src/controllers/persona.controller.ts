@@ -5,32 +5,25 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
-  HttpErrors,
+  del, get,
+  getModelSchemaRef, HttpErrors, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {llaves} from '../config/llaves';
 import {Credenciales, Persona} from '../models';
 import {PersonaRepository} from '../repositories';
 import {AuthenticatorService} from '../services';
-const fetch= require('node-fetch');
+const fetch = require('node-fetch');
 export class PersonaController {
   constructor(
     @repository(PersonaRepository)
-    public personaRepository : PersonaRepository,
+    public personaRepository: PersonaRepository,
     @service(AuthenticatorService)
-    public authenticator:AuthenticatorService
-  ) {}
+    public authenticator: AuthenticatorService
+  ) { }
 
   @post('/personas')
   @response(200, {
@@ -50,41 +43,41 @@ export class PersonaController {
     })
     persona: Omit<Persona, 'id'>,
   ): Promise<Persona> {
-    let clave=this.authenticator.GenerarClave()
-    let claveCifrada= this.authenticator.cifrarClave(clave)
-    persona.clave= claveCifrada;
-    let asunto='Confirmación de Usuario creado'
-    let p= await this.personaRepository.create(persona);
-    fetch(`${llaves.urlNotification}/mail?mensaje=Hola ${p.nombre} su usuario es: ${p.mail} y la contraseña: ${clave}&destinatario=${p.mail}&asunto=${asunto}`)
-    .then((data:any)=>{
-      console.log(data)
-    })
+    let clave = this.authenticator.GenerarClave()
+    let claveCifrada = this.authenticator.cifrarClave(clave)
+    persona.clave = claveCifrada;
+    let asunto = 'Confirmación de Usuario creado'
+    let p = await this.personaRepository.create(persona);
+    fetch(`${llaves.urlNotification}/mailpersona?mensaje=Hola ${p.nombre} su usuario es: ${p.mail} y la contraseña: ${clave}&destinatario=${p.mail}&asunto=${asunto}`)
+      .then((data: any) => {
+        console.log(data)
+      })
     return p
   }
 
-  @post('/identificarPersona',{
-    responses:{
-      '200':{
-        description:'Identifiación de usuarios'
+  @post('/identificarPersona', {
+    responses: {
+      '200': {
+        description: 'Identifiación de usuarios'
       }
     }
   })
   async identificarPersona(
-    @requestBody() credenciales:Credenciales
-  ){
-    let p= await this.authenticator.identificarPersona(credenciales.usuario, credenciales.clave)
-    if(p){
-        let token= this.authenticator.generarToken(p);
-        return{
-          datos:{
-            nombre:p.nombre,
-            mail: p.mail,
-            identificacion:p.identificacion,
-            id:p.id
-          },
-          tk: token
-        }
-    }else{
+    @requestBody() credenciales: Credenciales
+  ) {
+    let p = await this.authenticator.identificarPersona(credenciales.usuario, credenciales.clave)
+    if (p) {
+      let token = this.authenticator.generarToken(p);
+      return {
+        datos: {
+          nombre: p.nombre,
+          mail: p.mail,
+          identificacion: p.identificacion,
+          id: p.id
+        },
+        tk: token
+      }
+    } else {
       throw new HttpErrors[401]('Datos inválidos');
     }
 
@@ -117,6 +110,57 @@ export class PersonaController {
     @param.filter(Persona) filter?: Filter<Persona>,
   ): Promise<Persona[]> {
     return this.personaRepository.find(filter);
+  }
+
+  @get('/password/{mail}')
+  @response(200, {
+    description: 'Persona model instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(Persona, {includeRelations: true}),
+      },
+    },
+  })
+  async findByMail(
+    @param.path.string('mail') mail: string,
+    //@param.filter(Persona, {exclude: 'where'}) filter?: FilterExcludingWhere<Persona>
+  ): Promise<Persona> {
+    let p = await this.personaRepository.findOne({where: {mail: mail}});
+    const h = new Persona()
+
+    if (p) {
+      let id = p.id
+      let enlace = `${llaves.urlNotification}/passwordreset/${id}`;
+      fetch(`${llaves.urlNotification}/mailpersona?mensaje=Hola ${p.nombre} Haga clic aquí para recuperar su contraseña: ${enlace}&destinatario=${p.mail}&asunto=Recuperación de contraseña`)
+        .then((data: any) => {
+          console.log(data)
+        })
+      return p
+
+    } else {
+
+    }
+    return h;
+  }
+
+  @put('/passwordreset/{id}')
+  @response(204, {
+    description: 'Persona PUT success',
+  })
+  updatePassById(
+    @param.path.string('id') id: string,
+    @requestBody() persona: Persona,
+  ): Promise<void> {
+    let clave = this.authenticator.GenerarClave()
+    let claveCifrada = this.authenticator.cifrarClave(clave)
+    persona.clave = claveCifrada;
+    let asunto = 'Confirmación Cambio de Contraseña'
+    this.personaRepository.replaceById(id, persona);
+    fetch(`${llaves.urlNotification}/mailpersona?mensaje=Hola ${persona.nombre} su usuario es: ${persona.mail} y la contraseña: ${clave}&destinatario=${persona.mail}&asunto=${asunto}`)
+      .then((data: any) => {
+        console.log(data)
+      })
+    return clave;
   }
 
   @patch('/personas')

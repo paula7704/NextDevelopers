@@ -1,0 +1,65 @@
+<html>
+
+<head>
+  <title>Document title</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+  <app-nav-menu></app-nav-menu>
+  <app-content></app-content>
+  <div class="row" style="background-color: rgb(218, 163, 61);">
+    <!-- col-12 para celulares y col-md-4 para lo demás  -->
+    <div class="col-12 col-md-3 ">
+      <p></p>
+      <h1 style="text-align: center;">CATALOGO</h1>
+      <p></p>
+    </div>
+    <!-- col-12 para celulares y col-md-8 para lo demás -->
+    <div class="col-12 col-md-3">
+      <p></p>
+      <h1 style="text-align: center;">PEDIDOS</h1>
+      <p></p>
+    </div>
+    <div class="col-12 col-md-3">
+      <p></p>
+      <h1 style="text-align: center;">CLIENTES</h1>
+      <p></p>
+    </div>
+    <!-- col-12 para celulares y col-md-8 para lo demás -->
+    <div class="col-12 col-md-3">
+      <p></p>
+      <h1 style="text-align: center;">CONTACTO</h1>
+      <p></p>
+    </div>
+  </div>
+  <div class="row" style="background-color: rgb(255, 255, 255);">
+    <div class="col-12 col-md-4">
+      <p></p>
+      <img src="../assets/media/1.png" style="display: block; margin-left: auto; margin-right: auto;" width="40%">
+    </div>
+    <div class="col-12 col-md-4">
+      <p></p>
+      <img src="../assets/media/2.png" style="display: block; margin-left: auto; margin-right: auto;" width="40%">
+    </div>
+    <div class="col-12 col-md-4">
+      <p></p>
+      <img src="../assets/media/3.png" style="display: block; margin-left: auto; margin-right: auto;" width="40%">
+    </div>
+  </div>
+  <main class="flex-shrink-0">
+    <div class="container section">
+      <div class="card" style="width:40rem">
+        <div class="card-header">Registro usuario</div>
+        <div class="card-body">
+          <app-form></app-form>
+
+        </div>
+      </div>
+    </div>
+    <app-footer></app-footer>
+  </main>
+
+</body>
+
+</html>

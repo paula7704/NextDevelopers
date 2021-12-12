@@ -1,0 +1,115 @@
+<div>
+    <form [formGroup]="form" (ngSubmit)="OnSubmit()">
+        <div clas="form-group mb-3">
+            <label>Nombre</label>
+            <input 
+            type="text" 
+            formControlName="user_name" 
+            class="form-control"
+            
+            #FirstName
+            [ngClass]="{'is-invalid':submitted && f['user_name'].errors}"
+            />
+            <div *ngIf="submitted && f['user_name'].errors" 
+            class="invalid-feedback">
+            <div *ngIf = "f['user_name'].errors['required']">Nombre es requerido</div>
+            <div *ngIf = "f['user_name'].errors['minLength']">
+                El nombre debe contener mas de 3 caracteres  
+            </div>
+            <div *ngIf = "f['user_name'].errors['maxLength']">
+                El nombre supera la cantidad de caracteres permitidos  
+            </div> 
+            </div>
+        </div>
+        <div clas="form-group mb-3">
+            <label>Primer apellido</label>
+            <input 
+            type="text" 
+            formControlName="lastname" 
+            class="form-control"
+            
+            [ngClass]="{'is-invalid':submitted && f['lastname'].errors}"
+            />
+            <div *ngIf="submitted && f['lastname'].errors" class="invalid-feedback">
+            <div *ngIf = "f['lastname'].errors['required']">Apellido es requerido</div>
+            </div>
+        </div>
+        <div clas="form-group mb-3">
+            <label>Segundo apellido</label>
+            <input 
+            type="text" 
+            formControlName="mother_lastname" 
+            class="form-control"
+            
+            [ngClass]="{'is-invalid':submitted && f['mother_lastname'].errors}"
+            />
+            <div *ngIf="submitted && f['mother_lastname'].errors" class="invalid-feedback">
+            <div *ngIf = "f['mother_lastname'].errors['required']">Apellido es requerido</div>
+            </div>
+        </div>
+        <div clas="form-group mb-3">
+            <label>email</label>
+            <input 
+            type="text" 
+            formControlName="email" 
+            class="form-control"
+            [ngClass]="{'is-invalid':submitted && f['email'].errors}"
+            />
+            <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+            <div *ngIf = "f['email'].errors['required']">Email es requerido</div>
+            <div *ngIf = "f['email'].errors['email']">No es un correo valido</div>
+            </div>
+        </div>
+        <div clas="form-group mb-3">
+            <label>Contraseña</label>
+            <input 
+            type="password" 
+            formControlName="password" 
+            class="form-control"
+            [ngClass]="{'is-invalid':submitted && f['password'].errors}"
+            />
+            <div *ngIf="submitted && f['password'].errors" 
+            class="invalid-feedback">
+            <div *ngIf = "f['password'].errors['required']">Contraseña es requerido</div>
+            <div *ngIf = "f['password'].errors['minLength']">
+                El contraseña debe contener mas de 6 caracteres  
+            </div>
+            <div *ngIf = "f['password'].errors['maxLength']">
+                La contraseña supera la cantidad de caracteres permitidos  
+            </div> 
+            </div>
+        </div>
+        <div clas="form-group mb-3">
+            <label>Repetir contraseña</label>
+            <input 
+            type="password" 
+            formControlName="confirmPassword" 
+            class="form-control"
+            [ngClass]="{'is-invalid':submitted && f['confirmPassword'].errors}"
+            />
+            <div *ngIf="submitted && f['confirmPassword'].errors" class="invalid-feedback">
+            <div *ngIf = "f['confirmPassword'].errors['required']">Nombre es requerido</div>
+            </div>
+        </div>
+        <div clas="form-group mb-3">            
+            <input 
+            type="checkbox" 
+            formControlName="acceptTerms" 
+            class="form-check-input"
+            [ngClass]="{'is-invalid':submitted && f['acceptTerms'].errors}"
+            />
+            <label for="acceptTerms" class="form-check-label">
+                He leido y acepto los terminos y condiciones de la pagina
+            </label>
+            <div *ngIf="submitted && f['acceptTerms'].errors" class="invalid-feedback">
+            Se deben aceptar los terminos y condiciones
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <button type="submit" class="btn btn-primary btn-sm" (click)="OnSubmit()">Aceptar</button>
+            <button type="button" class="btn btn-danger btn-sm" (click)="OnReset()">Cancelar</button>
+
+        </div>                    
+    </form>
+</div>
+

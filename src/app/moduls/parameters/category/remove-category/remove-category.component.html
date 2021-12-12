@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="mb-5">
+      <br />
+    </div>
+    <div class="card">
+      <div class="card-header">Categoría</div>
+      <div class="card-body">
+        <p class="card-text">Eliminar categoría</p>
+        <div class="alert alert-info" role="alert">
+            Has seleccionado la opción de eliminar
+          </div>
+          <div class="card">
+            <div class="card-header">Categoría</div>
+            <div class="card-body">
+              <p class="card-text">Editar categoría</p>
+             <ul>
+                 <li><strong>Id: {{id}}</strong></li>
+                 <li><strong>Nombre categoría: {{name}}</strong></li>
+
+             </ul>
+             <div class="row">
+                 <div class="form-group">
+                     <a routerLink="/parameters/category-list" class="btn btn-danger">Cancelar</a>
+                     <button (click)="RemoveRecord()" class="btn btn-success">Confirmar</button>
+                 </div>
+             </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  

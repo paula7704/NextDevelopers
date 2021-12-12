@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="regiter-form">
+    <form [formGroup]="form">
+      <div class="form-group mb-3">
+        <input
+          type="text"
+          formControlName="email"
+          class="form-control"
+          placeholder="Correo electrónico"
+          [ngClass]="{ 'is-invalid': GetForm['email'].errors }"
+        />
+        <div *ngIf="GetForm['email'].errors" class="invalid-feedback">
+          <div *ngIf="GetForm['email'].errors['required']">Valor requerido</div>
+          <div *ngIf="GetForm['email'].errors['email']">Correo inválido</div>
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <input
+          type="password"
+          formControlName="password"
+          class="form-control"
+          placeholder="Contraseña"
+          [ngClass]="{ 'is-invalid': GetForm['password'].errors }"
+        />
+        <div *ngIf="GetForm['password'].errors" class="invalid-feedback">
+          <div *ngIf="GetForm['password'].errors['required']">
+            Valor requerido
+          </div>
+          <div *ngIf="GetForm['password'].errors['minlength']">
+            La contraseña debe tener como mínimo 8 caracteres
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group mb-3">
+            <button
+              [disabled]="GetForm['email'].errors || GetForm['password'].errors"
+              type="button"
+              class="btn btn-primary"
+              (click)="Login()"
+            >
+              Iniciar sesión
+            </button>
+          </div>
+          <div class="col">
+            <label style="float: right">
+              <a routerLink="/security/reset-password"
+                ><b>¿Olvidaste la contraseña?</b></a
+              ></label
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
